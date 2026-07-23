@@ -9,6 +9,33 @@
         "2026-07-23"
       ],
       "firstSeenDate": "2026-07-23"
+    },
+    "skill-creator": {
+      "id": "skill-creator",
+      "type": "skill",
+      "lastUsedDate": "2026-07-23",
+      "recentDates": [
+        "2026-07-23"
+      ],
+      "firstSeenDate": "2026-07-23"
+    },
+    "aihot": {
+      "id": "aihot",
+      "type": "skill",
+      "lastUsedDate": "2026-07-23",
+      "recentDates": [
+        "2026-07-23"
+      ],
+      "firstSeenDate": "2026-07-23"
+    },
+    "westock-data": {
+      "id": "westock-data",
+      "type": "skill",
+      "lastUsedDate": "2026-07-23",
+      "recentDates": [
+        "2026-07-23"
+      ],
+      "firstSeenDate": "2026-07-23"
     }
   },
   "mcps": {},

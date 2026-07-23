@@ -1,0 +1,9 @@
+{
+  "subject": "获取三花智控实时行情与技术面数据",
+  "description": "获取最新价格、近期K线走势、成交量变化、关键技术指标（MA、MACD、RSI等）、支撑位和压力位",
+  "activeForm": "获取实时行情与技术面数据",
+  "status": "completed",
+  "id": "1",
+  "createdAt": 1784790770911,
+  "updatedAt": 1784790928946
+}

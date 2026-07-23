@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "lastUpdated": 1784806975501,
+  "artifacts": [
+    {
+      "type": "media",
+      "uri": "file:///Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/macro-digest-2026-07-23-evening.md",
+      "name": "macro-digest-2026-07-23-evening.md",
+      "title": "macro-digest-2026-07-23-evening.md",
+      "mimeType": "text/markdown",
+      "contentType": "document",
+      "size": 3722,
+      "createdAt": 1784806939993,
+      "updatedAt": 1784806939993,
+      "_meta": {
+        "sourceTool": "PresentFiles",
+        "requestId": "acc4381e2a5340ff97fb5d989a4bf26d"
+      }
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2FWorkBuddy%2Fautomation-2026-07-23-11-31-09%2Fmacro-digest-2026-07-23-evening.md",
+      "name": "macro-digest-2026-07-23-evening.md",
+      "title": "macro-digest-2026-07-23-evening.md",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/macro-digest-2026-07-23-evening.md",
+        "changeType": "created",
+        "additions": 46,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/macro-digest-2026-07-23-evening.md\n===================================================================\n--- /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/macro-digest-2026-07-23-evening.md\n+++ /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/macro-digest-2026-07-23-evening.md\n@@ -0,0 +1,46 @@\n+# 每日宏观速览 📊 2026-07-23 周四（晚间版 · 19:45）\n+\n+## 🌍 国际\n+\n+- **欧央行利率决议**（今晚20:15公布）：料\"鹰派暂停\"，存款利率维持 **2.25%**（6月已加息25bp）；市场定价9月再加息概率约 **84%**。\n+  💡 存款利率是欧央行的基准政策利率，加息=收紧银根抗通胀，通常利好欧元、压制股市。\n+- **欧元区6月通胀 2.8%**（前值3.2%、预期3.0%，**回落超预期**），核心通胀2.4%，给欧央行观望空间。\n+  💡 通胀率(HICP)衡量物价涨幅，2%是欧央行目标；越接近2%越不需要加息。\n+- **油价逼近100美元**：布油升至约98美元；特朗普威胁打击伊朗基础设施，伊朗称\"以牙还牙\"，霍尔木兹风险未解。\n+- **日元跌破163**，创近40年新低；日央行官员暗示可加快加息，2年期日债收益率创1995年来新高。\n+  💡 日元贬值推高日本进口成本→通胀，倒逼日央行加息；也会扰动全球套息交易资金流。\n+- **30年期美债收益率连续12日>5%**，创近20年最长，\"债券义警\"施压美国财政。\n+  💡 长债收益率=政府长期借钱的成本，持续高于5%说明市场担心美国赤字与通胀。\n+- **美股收跌**：道指-0.01%、标普-0.14%、纳指-0.57%；财报亮眼：特斯拉Q2营收282.4亿美元（+26%，**超预期**）、Alphabet营收1198亿美元（+24%，**超预期**）。\n+\n+## 🇨🇳 国内\n+\n+- **A股缩量普涨**：沪指+0.25%（3876.78）、深成指+0.44%、创业板+0.25%、科创综指-2.60%；成交约2.2万亿（缩量约4580亿），电网设备29股涨停，半导体调整。\n+- **融资余额1.90万亿**，4月以来首次破1.9万亿；单日融资买入1777亿，占成交超10%。\n+  💡 融资余额是投资者借钱买股票的总量，攀升代表场内加杠杆意愿升温、情绪偏多。\n+- **上半年财政收入12.1万亿（+4.7%）**；证券交易印花税1549亿（**+97.3%**）。\n+  💡 印花税与股票成交额直接挂钩，近翻倍增长印证上半年A股交投显著活跃。\n+- **外资净增持**：上半年外资净增持境内股票和基金 **101亿美元**。\n+- **流动性**：周五2000亿MLF到期，机构预计央行**加量续作**，叠加买断式逆回购，月末资金面无忧。\n+  💡 MLF是央行向银行投放中期资金的工具，\"加量续作\"=多给钱，属宽松呵护信号。\n+\n+## 📜 政策\n+\n+- **证监会**：吴清会见加拿大养老基金CEO——坚决维护资本市场平稳运行，扩大高水平制度型开放、提升外资便利度。\n+- **中美**：王毅在马尼拉会见美国国务卿鲁比奥，会晤\"务实、积极、富有建设性\"，筹备下阶段高层交往。\n+- **体育总局**发布\"十五五\"体育强国规划：2030年体育产业总规模突破 **7万亿**。\n+- **其他**：市场监管总局暂停对杜邦反垄断调查；上交所今日发布科创板民营企业指数。\n+\n+## 📰 资讯\n+\n+- **OpenAI** 据悉将2030年前计算支出计划提高至约 **7500亿美元**，海外巨头集体加码数据中心。\n+- **北京国资运营公司**：坚定看好中国资本市场，已投入近百亿元布局股票市场。\n+- **私募自购潮**：7月以来23家私募自购13.53亿元，50亿以上大私募占超八成。\n+- **美国停摆风险**：特朗普称因两党支出分歧，9月或现联邦政府\"停摆\"。\n+\n+## 💡 一句话总结\n+\n+海外聚焦欧央行\"鹰派暂停\"、油价逼近100美元与日元历史性弱势；国内流动性呵护延续，杠杆资金与机构资金同步回暖，A股缩量普涨。\n+\n+---\n+🤖 由「晚间宏观资讯」自动化任务生成（数据截至 7/23 19:40，欧央行决议结果20:15后公布）。\n"
+      },
+      "createdAt": 1784806971389,
+      "updatedAt": 1784806971389
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2FWorkBuddy%2Fautomation-2026-07-23-11-31-09%2F.workbuddy%2Fautomations%2Fautomation-1784778871131%2Fmemory.md",
+      "name": "memory.md",
+      "title": "memory.md",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/automations/automation-1784778871131/memory.md",
+        "changeType": "created",
+        "additions": 7,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/automations/automation-1784778871131/memory.md\n===================================================================\n--- /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/automations/automation-1784778871131/memory.md\n+++ /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/automations/automation-1784778871131/memory.md\n@@ -0,0 +1,7 @@\n+# 晚间宏观资讯 - 执行记录\n+\n+## 2026-07-23 19:45（首次执行）\n+- 通过网络搜索采集过去24小时宏观数据（欧央行决议前瞻、欧元区通胀、美股/美债/日元/油价、A股收盘、财政部/央行/证监会动态、财联社与华尔街见闻要闻）。\n+- 生成简报文件：macro-digest-2026-07-23-evening.md（四类结构：国际/国内/政策/资讯，关键指标附科普）。\n+- 通过 wechat-push skill（Server酱）推送成功（code=0, pushid=47092935）。\n+- 注意：欧央行决议结果在20:15公布，晚于本任务19:45执行时间，只能报预期；若需覆盖结果可考虑将执行时间调至20:30后。\n"
+      },
+      "createdAt": 1784806971389,
+      "updatedAt": 1784806971389
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2FWorkBuddy%2Fautomation-2026-07-23-11-31-09%2F.workbuddy%2Fmemory%2F2026-07-23.md",
+      "name": "2026-07-23.md",
+      "title": "2026-07-23.md",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/memory/2026-07-23.md",
+        "changeType": "created",
+        "additions": 5,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/memory/2026-07-23.md\n===================================================================\n--- /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/memory/2026-07-23.md\n+++ /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/memory/2026-07-23.md\n@@ -0,0 +1,5 @@\n+# 2026-07-23\n+\n+- 19:45 执行「晚间宏观资讯」自动化：采集过去24小时宏观数据/政策/资讯，生成 macro-digest-2026-07-23-evening.md（🌍/🇨🇳/📜/📰四类+科普），并通过 wechat-push skill（Server酱）推送成功。\n+- 经验：本任务19:45运行时欧央行决议（20:15公布）尚未出结果，只能报预期值；后续如需含决议结果，建议调整运行时间至20:30后。\n+- 当日已有日间版 macro-digest-2026-07-23.md（13:07），晚间版做了增量更新（A股收盘、欧央行前瞻、日元163、财报等）。\n"
+      },
+      "createdAt": 1784806971389,
+      "updatedAt": 1784806971389
+    }
+  ]
+}

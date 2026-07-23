@@ -1,0 +1,28 @@
+{
+  "id": "automation-1784777469154",
+  "name": "经济讯息",
+  "prompt": "推送每天的宏观数据大事，简短。",
+  "status": "ACTIVE",
+  "scheduleType": "recurring",
+  "nextRunAt": 1784856000000.0027,
+  "cwds": [
+    "/Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09"
+  ],
+  "rrule": "FREQ=DAILY;BYHOUR=9;BYMINUTE=30",
+  "validFrom": "",
+  "validUntil": "",
+  "modelId": "hy3",
+  "modelIsThinking": true,
+  "skills": [
+    "宏观数据监控"
+  ],
+  "pushToWeChat": true,
+  "pushToWecomBot": false,
+  "ownerUserId": "10c1614a-da07-4d75-bf94-766e9ce42ee7",
+  "ownerStatus": "confirmed",
+  "ownerSource": "created",
+  "connectorIds": [],
+  "permissionMode": "fullAccess",
+  "createdAt": 1784777469154,
+  "updatedAt": 1784777476058
+}

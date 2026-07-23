@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "lastUpdated": 1784783082099,
+  "artifacts": [
+    {
+      "type": "media",
+      "uri": "file:///Users/zengx/WorkBuddy/2026-07-23-12-00-28/wechat-push.zip",
+      "name": "wechat-push.zip",
+      "title": "wechat-push.zip",
+      "mimeType": "application/octet-stream",
+      "contentType": "document",
+      "size": 5800,
+      "createdAt": 1784779356989,
+      "updatedAt": 1784779356990,
+      "_meta": {
+        "sourceTool": "PresentFiles",
+        "requestId": "09ca63a718b64ba99398b49b9993d17f"
+      }
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2F.workbuddy%2Fskills%2Fwechat-push%2Fscripts%2Fpush.py",
+      "name": "push.py",
+      "title": "push.py",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/.workbuddy/skills/wechat-push/scripts/push.py",
+        "changeType": "modified",
+        "additions": 123,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/.workbuddy/skills/wechat-push/scripts/push.py\n===================================================================\n--- /Users/zengx/.workbuddy/skills/wechat-push/scripts/push.py\n+++ /Users/zengx/.workbuddy/skills/wechat-push/scripts/push.py\n@@ -0,0 +1,123 @@\n+#!/usr/bin/env python3\n+# -*- coding: utf-8 -*-\n+\"\"\"\n+ServerChan (Server酱) 微信推送脚本。\n+\n+支持两种 SendKey 格式：\n+  - Turbo 版（推荐）：以 \"SCT\" 开头，接口 https://sctapi.ftqq.com/<key>.send\n+  - 旧版：以 \"SCU\" 开头，接口 https://sc.ftqq.com/<key>.send\n+\n+SendKey 优先级：--sendkey 参数 > 环境变量 SERVERCHAN_SENDKEY > config.json\n+\n+用法：\n+  python3 push.py --title \"标题\" --desp \"正文(Markdown)\"\n+  python3 push.py --set-key \"SCTxxxxxx\"      # 首次保存 SendKey 到 config.json\n+\"\"\"\n+\n+import argparse\n+import json\n+import os\n+import sys\n+import urllib.error\n+import urllib.parse\n+import urllib.request\n+\n+SKILL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n+CONFIG_PATH = os.path.join(SKILL_DIR, \"config.json\")\n+\n+TURBO_PREFIXES = (\"SCT\",)\n+\n+\n+def load_sendkey():\n+    # 1. 环境变量\n+    key = os.environ.get(\"SERVERCHAN_SENDKEY\")\n+    if key and key.strip():\n+        return key.strip()\n+    # 2. config.json\n+    if os.path.exists(CONFIG_PATH):\n+        try:\n+            with open(CONFIG_PATH, \"r\", encoding=\"utf-8\") as f:\n+                data = json.load(f)\n+            key = data.get(\"sendkey\")\n+            if key and key.strip():\n+                return key.strip()\n+        except Exception:\n+            pass\n+    return None\n+\n+\n+def save_sendkey(key):\n+    with open(CONFIG_PATH, \"w\", encoding=\"utf-8\") as f:\n+        json.dump({\"sendkey\": key.strip()}, f, ensure_ascii=False, indent=2)\n+\n+\n+def endpoint_for(key):\n+    if key.upper().startswith(TURBO_PREFIXES):\n+        return f\"https://sctapi.ftqq.com/{key}.send\", True\n+    return f\"https://sc.ftqq.com/{key}.send\", False\n+\n+\n+def push(sendkey, title, desp=\"\", channel=None, openid=None):\n+    sendkey = sendkey.strip()\n+    url, is_turbo = endpoint_for(sendkey)\n+\n+    # Turbo 版用 title/desp；旧版用 text/desp\n+    if is_turbo:\n+        params = {\"title\": title, \"desp\": desp}\n+    else:\n+        params = {\"text\": title, \"desp\": desp}\n+\n+    if channel:\n+        params[\"channel\"] = channel\n+    if openid:\n+        params[\"openid\"] = openid\n+\n+    data = urllib.parse.urlencode(params).encode(\"utf-8\")\n+    req = urllib.request.Request(url, data=data, method=\"POST\")\n+    req.add_header(\"User-Agent\", \"WorkBuddy-wechat-push/1.0\")\n+\n+    try:\n+        with urllib.request.urlopen(req, timeout=15) as resp:\n+            body = resp.read().decode(\"utf-8\", errors=\"replace\")\n+        return body\n+    except urllib.error.HTTPError as e:\n+        return json.dumps({\"code\": -1, \"message\": f\"HTTP {e.code}: {e.reason}\", \"raw\": e.read().decode('utf-8', errors='replace')}, ensure_ascii=False)\n+    except Exception as e:  # noqa: BLE001\n+        return json.dumps({\"code\": -1, \"message\": str(e)}, ensure_ascii=False)\n+\n+\n+def main():\n+    p = argparse.ArgumentParser(description=\"Push message to WeChat via ServerChan\")\n+    p.add_argument(\"--title\", help=\"消息标题（必填）\")\n+    p.add_argument(\"--desp\", default=\"\", help=\"消息正文，支持 Markdown\")\n+    p.add_argument(\"--sendkey\", default=None, help=\"ServerChan SendKey（覆盖 config/env）\")\n+    p.add_argument(\"--channel\", default=None, help=\"推送渠道，如 9\")\n+    p.add_argument(\"--openid\", default=None, help=\"指定接收人 openid\")\n+    p.add_argument(\"--set-key\", default=None, help=\"把 SendKey 保存到 config.json 并退出\")\n+    args = p.parse_args()\n+\n+    if args.set_key:\n+        save_sendkey(args.set_key)\n+        print(json.dumps({\"code\": 0, \"message\": \"SendKey 已保存到 config.json\"}, ensure_ascii=False))\n+        return\n+\n+    if not args.title:\n+        print(json.dumps({\"code\": -2, \"message\": \"缺少 --title 参数\"}, ensure_ascii=False))\n+        sys.exit(2)\n+\n+    key = args.sendkey or load_sendkey()\n+    if not key:\n+        print(json.dumps({\n+            \"code\": -2,\n+            \"message\": (\"未配置 SendKey。请先运行 \"\n+                        \"`python3 <skill>/scripts/push.py --set-key SCTxxxx`，\"\n+                        \"或设置环境变量 SERVERCHAN_SENDKEY，或在 config.json 写入 {\\\"sendkey\\\": \\\"...\\\"}\")\n+        }, ensure_ascii=False))\n+        sys.exit(2)\n+\n+    result = push(key, args.title, args.desp, args.channel, args.openid)\n+    print(result)\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n"
+      },
+      "createdAt": 1784783082074,
+      "updatedAt": 1784783082074
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2F.workbuddy%2Fskills%2Fwechat-push%2FSKILL.md",
+      "name": "SKILL.md",
+      "title": "SKILL.md",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/.workbuddy/skills/wechat-push/SKILL.md",
+        "changeType": "modified",
+        "additions": 57,
+        "deletions": 56,
+        "diff": "Index: /Users/zengx/.workbuddy/skills/wechat-push/SKILL.md\n===================================================================\n--- /Users/zengx/.workbuddy/skills/wechat-push/SKILL.md\n+++ /Users/zengx/.workbuddy/skills/wechat-push/SKILL.md\n@@ -1,85 +1,86 @@\n ---\n name: wechat-push\n-description: [TODO: Complete and informative explanation of what the skill does and when to use it. Include WHEN to use this skill - specific scenarios, file types, or tasks that trigger it.]\n+description: 通过 Server酱（ServerChan）把消息推送到微信。当用户要求\"推送到微信\"\"发微信通知我\"\"微信提醒\"或在自动化/定时任务中需要把内容发送到微信时使用。支持手动即时推送与配合 WorkBuddy 自动化做定时推送。\n+agent_created: true\n ---\n \n-# Wechat Push\n+# WeChat Push（Server酱）\n \n ## Overview\n \n-[TODO: 1-2 sentences explaining what this skill enables]\n+通过 Server酱（ServerChan）将任意文本/Markdown 消息推送到用户的个人微信。\n+Server酱是第三方中转服务：用户关注其服务号并获取 SendKey 后，调用其 HTTP 接口即可把消息经服务号下发到用户微信。\n+无需企业微信、无需公众号资质，是个人轻量推送的最低成本方案。\n \n-## Structuring This Skill\n+本 skill 提供一个离线可执行的推送脚本 `scripts/push.py`，AI 在需要时直接调用它完成发送，并处理 SendKey 的获取与保存。\n \n-[TODO: Choose the structure that best fits this skill's purpose. Common patterns:\n+## 何时使用\n \n-**1. Workflow-Based** (best for sequential processes)\n-- Works well when there are clear step-by-step procedures\n-- Example: DOCX skill with \"Workflow Decision Tree\" → \"Reading\" → \"Creating\" → \"Editing\"\n-- Structure: ## Overview → ## Workflow Decision Tree → ## Step 1 → ## Step 2...\n+- 用户说\"推送到微信：xxx\"\"发个微信给我\"\"微信提醒我 xxx\"。\n+- 用户在自动化（cron）中希望定时把摘要/天气/待办/监控结果发到微信。\n+- 任何需要把 WorkBuddy 生成的内容主动触达用户微信的场景。\n \n-**2. Task-Based** (best for tool collections)\n-- Works well when the skill offers different operations/capabilities\n-- Example: PDF skill with \"Quick Start\" → \"Merge PDFs\" → \"Split PDFs\" → \"Extract Text\"\n-- Structure: ## Overview → ## Quick Start → ## Task Category 1 → ## Task Category 2...\n+## 首次配置（SendKey）\n \n-**3. Reference/Guidelines** (best for standards or specifications)\n-- Works well for brand guidelines, coding standards, or requirements\n-- Example: Brand styling with \"Brand Guidelines\" → \"Colors\" → \"Typography\" → \"Features\"\n-- Structure: ## Overview → ## Guidelines → ## Specifications → ## Usage...\n+推送前必须知道用户的 Server酱 SendKey。判定顺序（高优先级优先）：\n \n-**4. Capabilities-Based** (best for integrated systems)\n-- Works well when the skill provides multiple interrelated features\n-- Example: Product Management with \"Core Capabilities\" → numbered capability list\n-- Structure: ## Overview → ## Core Capabilities → ### 1. Feature → ### 2. Feature...\n+1. 命令行 `--sendkey` 参数；\n+2. 环境变量 `SERVERCHAN_SENDKEY`；\n+3. skill 目录下的 `config.json` 中的 `sendkey` 字段。\n \n-Patterns can be mixed and matched as needed. Most skills combine patterns (e.g., start with task-based, add workflow for complex operations).\n+调用脚本时若上述均无值，脚本会返回 `code: -2` 并提示未配置。此时：\n \n-Delete this entire \"Structuring This Skill\" section when done - it's just guidance.]\n+1. 询问用户是否已有 Server酱 SendKey（注册地址 https://sct.ftqq.com ，登录后在「Key&API」页面获取，形如 `SCTxxxx`）。\n+2. 若用户已提供，运行以下命令把 Key 持久化到 `config.json`（仅本机本地存储）：\n+   ```\n+   python3 <skill_dir>/scripts/push.py --set-key \"SCT你的Key\"\n+   ```\n+3. 若用户还没有，简要引导其去 https://sct.ftqq.com 注册并在微信中关注「Server酱」服务号后复制 SendKey，再交给本 skill 保存。\n \n-## [TODO: Replace with the first main section based on chosen structure]\n+> 安全提示：SendKey 等同推送凭证，仅存于本机 `config.json` 或环境变量，不要写入会话、日志或分享给他人。\n \n-[TODO: Add content here. See examples in existing skills:\n-- Code samples for technical skills\n-- Decision trees for complex workflows\n-- Concrete examples with realistic user requests\n-- References to scripts/templates/references as needed]\n+## 手动即时推送\n \n-## Resources\n+当用户在对话中要求推送时：\n \n-This skill includes example resource directories that demonstrate how to organize different types of bundled resources:\n+1. 从用户话语中提取**标题**（简短）与**正文**（详情，可包含 Markdown）。\n+   - 若用户只给了一段话，用前 20 字左右作为标题，整段作为正文。\n+2. 调用推送脚本（路径见 `Resources` 下的脚本定位）：\n+   ```\n+   python3 <skill_dir>/scripts/push.py --title \"标题\" --desp \"正文，支持 **Markdown**\"\n+   ```\n+3. 解析脚本输出的 JSON：\n+   - `code == 0`（Turbo）或旧版返回 `{\"errno\":0,...}` / 含 `\"message\":\"OK\"`：告知用户\"已推送到微信 ✅\"。\n+   - 其它：把 `message` 字段原样反馈给用户，必要时提示重新配置 SendKey 或检查网络。\n \n-### scripts/\n-Executable code (Python/Bash/etc.) that can be run directly to perform specific operations.\n+## 定时自动推送（配合 WorkBuddy 自动化）\n \n-**Examples from other skills:**\n-- PDF skill: `fill_fillable_fields.py`, `extract_form_field_info.py` - utilities for PDF manipulation\n-- DOCX skill: `document.py`, `utilities.py` - Python modules for document processing\n+本 skill 同时服务于自动化场景。在创建自动化（automation）时，把下面任一阵列作为自动化 prompt 即可，AI 会自动调用本 skill 完成推送：\n \n-**Appropriate for:** Python scripts, shell scripts, or any executable code that performs automation, data processing, or specific operations.\n+- 每日早报：`每天早上 9:00，抓取今日天气与待办摘要，用 wechat-push skill 推送到我的微信，标题写\"今日早报\"。`\n+- 监控告警：`每小时检查一次服务状态，若异常则用 wechat-push skill 推送微信告警，标题含\"服务异常\"。`\n+- 内容订阅：`每天 20:00 汇总今日 AI 新闻要点，通过 wechat-push skill 推送到微信。`\n \n-**Note:** Scripts may be executed without loading into context, but can still be read by Claude for patching or environment adjustments.\n+自动化 prompt 只需描述\"做什么内容 + 用 wechat-push skill 推送\"，无需重复接口细节——本 skill 的调用规则会被自动加载。\n \n-### references/\n-Documentation and reference material intended to be loaded into context to inform Claude's process and thinking.\n+## 注意事项\n \n-**Examples from other skills:**\n-- Product management: `communication.md`, `context_building.md` - detailed workflow guides\n-- BigQuery: API reference documentation and query examples\n-- Finance: Schema documentation, company policies\n+- 正文 `desp` 支持 Markdown；标题尽量简短（Turbo 版标题上限 256 字节）。\n+- 单条消息正文上限约 64KB，超长内容请拆分或只发摘要+链接。\n+- 推送失败多为 SendKey 失效、网络受限或服务号未关注；先核对 SendKey，再提示用户检查微信是否关注服务号。\n+- 不要在 `desp` 中拼接明文密码/密钥等敏感信息。\n \n-**Appropriate for:** In-depth documentation, API references, database schemas, comprehensive guides, or any detailed information that Claude should reference while working.\n+## Resources\n \n-### assets/\n-Files not intended to be loaded into context, but rather used within the output Claude produces.\n+### scripts/push.py\n+核心推送脚本，功能：\n+- `--title <标题> --desp <正文>`：发起一次推送（同步返回 JSON 结果）。\n+- `--set-key <SCTxxxx>`：把 SendKey 存入 `config.json`。\n+- `--sendkey <key>`：临时指定 Key，覆盖其它来源。\n+- `--channel <n>` / `--openid <id>`：可选，指定渠道或接收人。\n \n-**Examples from other skills:**\n-- Brand styling: PowerPoint template files (.pptx), logo files\n-- Frontend builder: HTML/React boilerplate project directories\n-- Typography: Font files (.ttf, .woff2)\n+脚本定位：`<skill_dir>/scripts/push.py`，其中 `<skill_dir>` 为 `~/.workbuddy/skills/wechat-push`（用户级）。\n+调用前可用 `os.path` 解析本文件所在目录，或直接用绝对路径 `~/.workbuddy/skills/wechat-push/scripts/push.py`。\n \n-**Appropriate for:** Templates, boilerplate code, document templates, images, icons, fonts, or any files meant to be copied or used in the final output.\n-\n----\n-\n-**Any unneeded directories can be deleted.** Not every skill requires all three types of resources.\n+### references/serverchan.md\n+Server酱接口字段、返回码与 Turbo/旧版差异的速查参考，需在构造复杂请求时按需加载。\n"
+      },
+      "createdAt": 1784783082074,
+      "updatedAt": 1784783082074
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2F.workbuddy%2Fskills%2Fwechat-push%2Freferences%2Fserverchan.md",
+      "name": "serverchan.md",
+      "title": "serverchan.md",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/.workbuddy/skills/wechat-push/references/serverchan.md",
+        "changeType": "modified",
+        "additions": 44,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/.workbuddy/skills/wechat-push/references/serverchan.md\n===================================================================\n--- /Users/zengx/.workbuddy/skills/wechat-push/references/serverchan.md\n+++ /Users/zengx/.workbuddy/skills/wechat-push/references/serverchan.md\n@@ -0,0 +1,44 @@\n+# Server酱（ServerChan）接口速查\n+\n+## 两个版本\n+\n+| 版本 | SendKey 前缀 | 接口地址 | 标题字段 | 正文字段 |\n+|------|-------------|----------|----------|----------|\n+| Turbo（推荐） | `SCT` | `https://sctapi.ftqq.com/<key>.send` | `title` | `desp` |\n+| 旧版 | `SCU` | `https://sc.ftqq.com/<key>.send` | `text` | `desp` |\n+\n+`push.py` 已根据前缀自动选择版本，无需手动指定。\n+\n+## 请求\n+\n+- 方法：GET 或 POST（脚本用 POST + `application/x-www-form-urlencoded`）\n+- 必填：`title` / `text`（标题）\n+- 可选：`desp`（正文，支持 Markdown）、`channel`（渠道，如 `9`）、`openid`（指定接收人）\n+\n+## 返回（Turbo 版 JSON）\n+\n+```json\n+{\n+  \"code\": 0,\n+  \"message\": \"OK\",\n+  \"data\": { \"pushid\": \"...\", \"readkey\": \"...\", \"error\": \"SUCCESS\", \"errno\": 0 }\n+}\n+```\n+\n+- `code == 0`：推送成功。\n+- `code != 0`：失败，`message` 含原因（常见：SendKey 无效、用户未关注服务号、频率/额度超限）。\n+- 旧版返回含 `errno` 字段，`errno == 0` 为成功。\n+\n+## 常用错误与排查\n+\n+| 现象 | 可能原因 | 处理 |\n+|------|----------|------|\n+| code -2 / 未配置 Key | 未保存 SendKey | 运行 `--set-key` 或设置环境变量 |\n+| code !=0 报 key 无效 | SendKey 复制错/失效 | 让用户去后台重新复制 |\n+| 接口调用成功但微信收不到 | 未关注「Server酱」服务号 | 提示用户在微信关注服务号并绑定 |\n+| 收不到且后台显示已发送 | 微信通知被折叠/免打扰 | 指导用户检查微信通知设置 |\n+\n+## 限制\n+\n+- 免费版有每日推送条数上限（Turbo 约 5 条/日，旧版按触发额度），高频场景建议升级或错峰。\n+- 标题 ≤ 256 字节；正文 ≤ 约 64KB。\n"
+      },
+      "createdAt": 1784783082074,
+      "updatedAt": 1784783082074
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2FWorkBuddy%2F2026-07-23-12-00-28%2F.workbuddy%2Fmemory%2F2026-07-23.md",
+      "name": "2026-07-23.md",
+      "title": "2026-07-23.md",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/WorkBuddy/2026-07-23-12-00-28/.workbuddy/memory/2026-07-23.md",
+        "changeType": "modified",
+        "additions": 11,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/WorkBuddy/2026-07-23-12-00-28/.workbuddy/memory/2026-07-23.md\n===================================================================\n--- /Users/zengx/WorkBuddy/2026-07-23-12-00-28/.workbuddy/memory/2026-07-23.md\n+++ /Users/zengx/WorkBuddy/2026-07-23-12-00-28/.workbuddy/memory/2026-07-23.md\n@@ -0,0 +1,11 @@\n+# 2026-07-23 工作记录\n+\n+## 创建 wechat-push skill（Server酱微信推送）\n+- 路径（用户级）：`~/.workbuddy/skills/wechat-push/`\n+- 组成：`SKILL.md`、`scripts/push.py`、`references/serverchan.md`\n+- 能力：通过 Server酱（ServerChan）把消息推送到个人微信；支持手动即时推送 + 配合 WorkBuddy 自动化定时推送。\n+- SendKey 来源优先级：`--sendkey` > 环境变量 `SERVERCHAN_SENDKEY` > `config.json`；Turbo 版(SCT)与旧版(SCU)按前缀自动选接口。\n+- 已用 skill-creator 的 init/package 脚本初始化并校验通过，打包产物：`/Users/zengx/WorkBuddy/2026-07-23-12-00-28/wechat-push.zip`\n+- 测试：无 Key 返回 -2、无效 Key 优雅返回 HTTP 400 JSON、--set-key 正确写入 config.json（测试后已清理）。\n+- **已配置真实 SendKey 到 `config.json`（Turbo 版），并发起真实测试推送，返回 code:0/SUCCESS（pushid:47042521），确认可推到用户微信。**\n+- 注意：未处理 BOOTSTRAP.md 身份初始化（用户直接给了具体任务，留待后续）。\n"
+      },
+      "createdAt": 1784783082074,
+      "updatedAt": 1784783082074
+    }
+  ]
+}

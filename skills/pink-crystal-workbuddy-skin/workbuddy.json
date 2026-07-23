@@ -1,0 +1,7 @@
+{
+  "display_name": "WorkBuddy 换肤",
+  "display_name_en": "WorkBuddy Skin",
+  "description_zh": "WorkBuddy 桌面端主题定制服务。通过 asar 内联 CSS 注入提供毛玻璃套装皮肤，支持动态与静态两种构建产物，覆盖 macOS 和 Windows 双平台一键安装与回滚。",
+  "description_en": "WorkBuddy desktop theme customization service. Injects frosted-glass skin CSS into app.asar, with dynamic and static builds, supporting macOS and Windows one-click install and rollback.",
+  "category": "productivity-tools"
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.zengx.wbsync.pull</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/zsh</string>
+        <string>-c</string>
+        <string>sleep 30 && WB_SYNC_AUTO=1 /Users/zengx/.workbuddy/wb-sync.sh pull</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/wbsync-pull.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/wbsync-pull.err</string>
+</dict>
+</plist>

@@ -1,0 +1,45 @@
+# 2026-07-23
+
+## WorkBuddy 跨设备同步
+
+用户在多台设备（公司/家里）使用 WorkBuddy，遇到对话历史不跨设备同步的问题。
+WorkBuddy 只同步账号配置，对话记录、记忆文件、Skills、MCP 配置等都存在本地 `~/.workbuddy/`，不自动同步。
+
+为用户写了一个一键同步脚本：`~/.workbuddy/wb-sync.sh`
+- 用法：`wb-sync [init|push|pull|status]`
+- 原理：`~/.workbuddy/` 目录用 Git 管理 → 推送到 GitHub 私有仓库 → 另一台电脑 pull
+- 已在 `~/.zshrc` 添加 alias `wb-sync`
+- 已添加 `.gitignore`，排除 `app/`、`binaries/`、`logs/`、`traces/`、`shell-snapshots/`、WAL 文件、市场缓存、临时文件等
+
+### 已完成配置（公司电脑）
+- GitHub 账号：zengx
+- 仓库：https://github.com/zengx/WorkBuddy （私有）
+- 认证：SSH Key（ed25519，公钥已添加到 GitHub）
+- Git 身份：zengx <zengx@users.noreply.github.com>
+- ✅ 首次推送：6745 个对象，16.57 MiB，main 分支
+
+### 待完成（家里电脑）
+1. 安装 WorkBuddy 并登录同账号
+2. 生成 SSH Key 并添加到 GitHub
+3. 把 `wb-sync.sh` 脚本和 alias 同步过去（可以从 GitHub 仓库或直接复制）
+4. 运行 `wb-sync pull` 拉取配置
+5. 日常：`wb-sync push` / `wb-sync pull`
+
+### 自动化已配置（macOS launchd）
+配置了 `~/Library/LaunchAgents/` 下两个 launchd 任务，做到全自动：
+- `com.zengx.wbsync.pull.plist` - 登录/启动时自动拉取（sleep 30 后执行）
+- `com.zengx.wbsync.push.plist` - 每 5 分钟检查一次，WorkBuddy 不在时自动推送
+
+脚本改造：检测 `WB_SYNC_AUTO=1` 环境变量或非 TTY 时跳过确认提示
+日志位置：`/tmp/wbsync-pull.log`、`/tmp/wbsync-push.log`
+
+管理命令：
+- 停止：launchctl bootout gui/$UID ~/Library/LaunchAgents/com.zengx.wbsync.push.plist
+- 启动：launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.zengx.wbsync.push.plist
+- 立即执行 push：launchctl kickstart -k gui/$UID/com.zengx.wbsync.push
+
+### 注意事项
+- 两台电脑 macOS 用户名不同时，可能需要在 WorkBuddy 里重新指定工作目录
+- 切换电脑前要先 Cmd+Q 退出 WorkBuddy，再 push/pull
+- 不要两台同时 push，避免冲突
+- 家里电脑也配同样的 launchd 任务（脚本可从 GitHub 拉取）

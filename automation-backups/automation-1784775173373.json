@@ -11,7 +11,7 @@
   "rrule": "FREQ=DAILY;BYHOUR=8;BYMINUTE=30",
   "validFrom": "",
   "validUntil": "",
-  "modelId": "auto",
+  "modelId": "hy3",
   "modelIsThinking": true,
   "skills": [],
   "pushToWeChat": true,
@@ -24,5 +24,5 @@
   "connectorIds": [],
   "permissionMode": "fullAccess",
   "createdAt": 1784775173373,
-  "updatedAt": 1784775173373
+  "updatedAt": 1784777481670
 }

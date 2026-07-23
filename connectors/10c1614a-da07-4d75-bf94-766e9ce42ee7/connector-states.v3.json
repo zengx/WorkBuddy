@@ -3,7 +3,12 @@
   "headerOverridesBearerStripped": true,
   "staleManagedAuthHeadersPurged": true,
   "accountIdentityKey": "10c1614a-da07-4d75-bf94-766e9ce42ee7||enterprise",
-  "userDisabled": {},
+  "everConnected": [
+    "tencent-docs"
+  ],
+  "userDisabled": {
+    "tencent-docs": true
+  },
   "disabledToolsOverrides": {},
   "mcpSecurityMigrated": true,
   "cSideAutoBoundDefaultDisabledMigrated": true,
@@ -16,6 +21,14 @@
     "keyCheck": "Sx+EtW9wrcn5CMS1FF6msQ==",
     "createdAt": 1784696555426
   },
-  "headerOverrides": {},
+  "headerOverrides": {
+    "tencent-docs": {
+      "Authorization": {
+        "iv": "bQqDO1zRPOTXo22u",
+        "tag": "LIJIxW/x+SdVyaqMI1Ml0A==",
+        "ct": "j1k5YWMErIOxJiZPEt1CcwwFrvIu7C9pyGyS8NZyj70="
+      }
+    }
+  },
   "envOverrides": {}
 }

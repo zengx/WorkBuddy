@@ -1,0 +1,26 @@
+{
+  "id": "automation-1784784007641",
+  "name": "每日 AI 新闻推送",
+  "prompt": "关注当天 AI 领域的重要动态，侧重 AI coding 与具身智能方向。筛选 3-5 条有价值的信息，简要说明事件内容及值得关注的原因。",
+  "status": "ACTIVE",
+  "scheduleType": "recurring",
+  "nextRunAt": 1784854200000.0027,
+  "cwds": [
+    "/Users/zengx/WorkBuddy/automation-2026-07-23-13-20-07"
+  ],
+  "rrule": "FREQ=DAILY;BYHOUR=9;BYMINUTE=0",
+  "validFrom": "",
+  "validUntil": "",
+  "modelId": "hy3",
+  "modelIsThinking": true,
+  "skills": [],
+  "pushToWeChat": true,
+  "pushToWecomBot": false,
+  "ownerUserId": "10c1614a-da07-4d75-bf94-766e9ce42ee7",
+  "ownerStatus": "confirmed",
+  "ownerSource": "created",
+  "connectorIds": [],
+  "permissionMode": "fullAccess",
+  "createdAt": 1784784007641,
+  "updatedAt": 1784784007641
+}

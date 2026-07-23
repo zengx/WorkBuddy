@@ -1,0 +1,9 @@
+{
+  "subject": "获取三花智控基本面财务数据",
+  "description": "获取最新一期财报数据：营收、净利润、毛利率、ROE、资产负债率等核心财务指标",
+  "activeForm": "获取基本面财务数据",
+  "status": "completed",
+  "id": "2",
+  "createdAt": 1784790770918,
+  "updatedAt": 1784790928950
+}

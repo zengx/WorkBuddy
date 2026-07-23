@@ -1,0 +1,25 @@
+{
+  "id": "automation-1784783349443",
+  "name": "每日 5 个英语单词",
+  "prompt": "每天推荐 5 个实用英语单词，优先选取生活和职场中常见词汇。输出词义、音标、例句，以及一条便于记忆的小提示。",
+  "status": "ACTIVE",
+  "scheduleType": "recurring",
+  "nextRunAt": 1784818763818.0015,
+  "lastRunAt": 1784801063818,
+  "cwds": [
+    "/Users/zengx/WorkBuddy/automation-2026-07-23-13-09-09"
+  ],
+  "rrule": "FREQ=HOURLY;INTERVAL=5;BYDAY=MO,TU,WE,TH,FR,SA,SU",
+  "modelId": "hy3",
+  "modelIsThinking": true,
+  "skills": [],
+  "pushToWeChat": true,
+  "pushToWecomBot": false,
+  "ownerUserId": "10c1614a-da07-4d75-bf94-766e9ce42ee7",
+  "ownerStatus": "confirmed",
+  "ownerSource": "created",
+  "connectorIds": [],
+  "permissionMode": "fullAccess",
+  "createdAt": 1784783349443,
+  "updatedAt": 1784801063820
+}

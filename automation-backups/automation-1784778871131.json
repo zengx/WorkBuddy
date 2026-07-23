@@ -1,0 +1,25 @@
+{
+  "id": "automation-1784778871131",
+  "name": "晚间宏观资讯",
+  "prompt": "执行宏观数据监控：浏览免费数据源（Trading Economics 经济日历、FRED、国家统计局、央行官网、证监会、财联社、华尔街见闻等），整理过去24小时发布的宏观数据、货币政策与重要财经资讯。按【🌍国际 / 🇨🇳国内 / 📜政策 / 📰资讯】四类简短呈现，每条不超过2行，重点突出数值与超预期/不及预期；每个关键指标附一句小白向科普。保持简洁（整体控制在合适篇幅）。完成后通过微信推送（push_to_wechat）。",
+  "status": "ACTIVE",
+  "scheduleType": "recurring",
+  "nextRunAt": 1784893200000.0015,
+  "lastRunAt": 1784806999923,
+  "cwds": [
+    "/Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09"
+  ],
+  "rrule": "FREQ=DAILY;BYHOUR=19;BYMINUTE=45",
+  "modelId": "hy3",
+  "modelIsThinking": true,
+  "skills": [],
+  "pushToWeChat": false,
+  "pushToWecomBot": false,
+  "ownerUserId": "10c1614a-da07-4d75-bf94-766e9ce42ee7",
+  "ownerStatus": "confirmed",
+  "ownerSource": "created",
+  "connectorIds": [],
+  "permissionMode": "fullAccess",
+  "createdAt": 1784778871131,
+  "updatedAt": 1784806999925
+}

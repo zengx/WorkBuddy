@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "lastUpdated": 1784778429338,
+  "artifacts": [
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2FWorkBuddy%2Fautomation-2026-07-23-11-31-09%2Fmacro-digest-2026-07-23.md",
+      "name": "macro-digest-2026-07-23.md",
+      "title": "macro-digest-2026-07-23.md",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/macro-digest-2026-07-23.md",
+        "changeType": "modified",
+        "additions": 17,
+        "deletions": 19,
+        "diff": "Index: /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/macro-digest-2026-07-23.md\n===================================================================\n--- /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/macro-digest-2026-07-23.md\n+++ /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/macro-digest-2026-07-23.md\n@@ -1,22 +1,20 @@\n-# 每日宏观速览 📊\n-**2026-07-23 周四｜过去24小时**\n+# 宏观数据大事 · 2026-07-23（简短版）\n \n-## 🇨🇳 国内\n-- **7月LPR维持不变**：1年期 3.0%、5年期以上 3.5%，连续14个月持平。💡 LPR是银行贷款\"参考价\"，不变意味着房贷与企业融资成本保持稳定。\n-- **数字产业前5月**：收入 16.7 万亿、同比 +13%，利润 +19.3%。\n-- **证监会主席吴清**：坚决维护资本市场平稳健康运行。\n-- **以旧换新**：上半年带动销售额 1.1 万亿、惠及 1.5 亿人次。\n-- **财政部**：2026 中央本级基础研究预算同比 +16.3%。\n-- **防汛**：入汛以来中央已拨付灾区资金 11.9 亿元。\n+> 每日 09:30 自动推送 · 数据来源：公开财经资讯聚合\n \n-## 🌍 国际\n-- **今日焦点**：欧央行（ECB）利率决议公布；日本 CPI、加拿大零售销售将发布。\n-- **油价大涨**：美伊对峙升级，霍尔木兹/曼德海峡通航量大降，布油 +4.93% 报 95.5 美元、美油 +2.54% 报 86.48。💡 两海峡是核心原油航道，受阻即推升油价风险溢价。\n-- **避险升温**：COMEX 黄金 +1.44% 报 4135、白银 +1.57%，日元兑美元跌至近40年新低。\n-- **美债**：2–5 年期收益率升至 2026 年高点，市场情绪偏谨慎。\n-- **世行警告**：美伊冲突若持续，或令全球增速降至 1.3%。\n+## 🌍 全球\n+- **油价飙升**：布油 +4.93% 报 95.5 美元/桶，美油 +2.54% 报 86.48 美元。美伊冲突升级，霍尔木兹/曼德海峡通航量骤降（霍尔木兹 -31%、曼德 -34%），供应溢价推涨。\n+- **美债收益率集体走高**：2–5 年期升至 2026 年高点；30 年期连续 12 日站上 5%（历史纪录）。市场押注美联储年内加息。\n+- **避险资产**：黄金 ~4135 美元/盎司（+1.44%）托底；日元跌至近 40 年新低。\n+- **欧央行**今日利率决议，料按兵不动、为 9 月加息留空间。\n+- **世行警告**：美伊冲突持续或令全球增速降至 1.3%。\n+- **美股**小幅承压：标普 -0.1%，纳指 -0.57%，道指基本持平。\n \n-## 📜 政策 / 其他\n-- 欧盟各国未就第21轮对俄制裁达成一致。\n-- 法国将全面禁止 15 岁以下使用社交媒体。\n-- 白宫指控月之暗面用英伟达硬件违反美出口管制。\n+## 🇨🇳 国内\n+- **LPR 连续 14 个月不变**：1 年期 3.0%、5 年期 3.5%。货币政策处\"观察期\"，银行净息差企稳、主动下调动力不足。\n+- **财政部**：上半年证券交易印花税同比 +97.3%；中央本级基础研究预算同比 +16.3%。\n+- **外资看多**：花旗上调中国股票至\"超配\"，渣打维持超配，视为新兴市场资本轮动首选。\n+- **以旧换新**上半年带动销售额 1.1 万亿元，惠及 1.5 亿人次。\n+\n+## 📌 一句话\n+地缘风险主导今日盘面（油涨、债跌、避险升）；国内政策保持定力，焦点转向月底政治局会议与 8–9 月增量政策窗口。\n"
+      },
+      "createdAt": 1784778427244,
+      "updatedAt": 1784778427244
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2FWorkBuddy%2Fautomation-2026-07-23-11-31-09%2F.workbuddy%2Fautomations%2Fautomation-1784777469154%2Fmemory.md",
+      "name": "memory.md",
+      "title": "memory.md",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/automations/automation-1784777469154/memory.md",
+        "changeType": "modified",
+        "additions": 7,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/automations/automation-1784777469154/memory.md\n===================================================================\n--- /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/automations/automation-1784777469154/memory.md\n+++ /Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/.workbuddy/automations/automation-1784777469154/memory.md\n@@ -5,4 +5,11 @@\n - 数据源：WebSearch 聚合（东方财富/腾讯财经/陆家嘴财经早餐/Fed/Trading Economics/Scotia日历）。\n - 产出：macro-digest-2026-07-23.md，已 present_files。\n - 要点：7月LPR连续14个月不变（1年3.0%/5年3.5%）；数字产业前5月+13%；以旧换新带动1.1万亿；今日ECB利率决议；美伊对峙推升油价（布油95.5/+4.93%）、黄金4135/+1.44%；日元近40年新低；美债2-5年收益率创2026高点；世行警告冲突或令全球增速降至1.3%。\n - 说明：原技能依赖 browser/message 工具不可用，已改用 WebSearch 采集并以文本+md 交付；push_to_wechat 标记为真但当前环境无微信推送通道，仅输出摘要。\n+\n+## 2026-07-23 11:46 (GMT+8) 第二次执行\n+- 任务：每日宏观数据大事推送（简短版）。\n+- 数据源：WebSearch 聚合（陆家嘴财经早餐、国际金融要情、华尔街见闻、财联社等）。\n+- 产出：重写 macro-digest-2026-07-23.md（简短版，覆盖全球+国内+一句话总结），已 present_files。\n+- 要点：美伊冲突推升油价（布油95.5/+4.93%、美油86.48/+2.54%）、霍尔木兹/曼德海峡通航骤降；美债2–5年期升至2026高点、30年期连续12日>5%；黄金~4135、日元近40年新低；欧央行今日料按兵不动；世行警告冲突或令全球增速降至1.3%；美股小幅承压。国内：LPR连续14月不变（1年3.0%/5年3.5%）、印花税+97.3%、外资看多中国股票、以旧换新带动1.1万亿。\n+- 说明：沿用 WebSearch 采集 + md + present_files 交付路径；无微信推送通道。\n"
+      },
+      "createdAt": 1784778427244,
+      "updatedAt": 1784778427244
+    },
+    {
+      "type": "media",
+      "uri": "file:///Users/zengx/WorkBuddy/automation-2026-07-23-11-31-09/macro-digest-2026-07-23.md",
+      "name": "macro-digest-2026-07-23.md",
+      "title": "macro-digest-2026-07-23.md",
+      "mimeType": "text/markdown",
+      "contentType": "document",
+      "size": 1508,
+      "createdAt": 1784777538748,
+      "updatedAt": 1784778423237,
+      "_meta": {
+        "sourceTool": "PresentFiles",
+        "requestId": "2d4fed870479424c9bb5ded64faa3740"
+      }
+    }
+  ]
+}

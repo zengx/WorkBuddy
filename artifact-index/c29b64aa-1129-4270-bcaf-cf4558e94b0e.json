@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "lastUpdated": 1784791181350,
+  "artifacts": [
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2FWorkBuddy%2Finvestment%2F.workbuddy%2Fmemory%2F2026-07-23.md",
+      "name": "2026-07-23.md",
+      "title": "2026-07-23.md",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/WorkBuddy/investment/.workbuddy/memory/2026-07-23.md",
+        "changeType": "created",
+        "additions": 28,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/WorkBuddy/investment/.workbuddy/memory/2026-07-23.md\n===================================================================\n--- /Users/zengx/WorkBuddy/investment/.workbuddy/memory/2026-07-23.md\n+++ /Users/zengx/WorkBuddy/investment/.workbuddy/memory/2026-07-23.md\n@@ -0,0 +1,28 @@\n+# 2026-07-23 工作日志\n+\n+## 三花智控(002050)个股分析\n+\n+用户持仓：保本价46.333元，100股。\n+\n+### 关键数据\n+- 当前价：37.19元（7/23收盘），浮亏-19.7%（约-914元）\n+- 技术面：完全空头排列，MACD/KDJ/RSI严重超卖，布林下轨35.89\n+- 基本面：2025年报营收310亿(+11%)净利40.6亿(+31%)；2026Q1增速骤降(营收+1.36%净利+2.68%)\n+- 机构目标价：50.46元，39家机构覆盖，维持买入评级\n+- 资金面：主力20日净流出22.7亿，散户接盘\n+\n+### 关键事件\n+- 7/20控股股东提议回购2-4亿元（上限60元）\n+- 7/22限售股解禁698万股（含高管）\n+- 特斯拉Optimus量产预期升温\n+\n+### 操作建议\n+- 止损：34.50元（跌破35.78且3日不收回）\n+- 减仓：41-42元（MA20压力位）\n+- 保本出：46元附近\n+- 止盈：50元（机构目标价）\n+\n+### 技术备注\n+- westock-data CLI路径：/Applications/WorkBuddy.app/Contents/Resources/app.asar.unpacked/resources/builtin-skills/westock-data/scripts/index.js\n+- 执行方式：NODE_PATH=... node <path> <command> <args>\n+- news article命令在当前渠道不可用，需用WebSearch替代\n"
+      },
+      "createdAt": 1784791181349,
+      "updatedAt": 1784791181349
+    }
+  ]
+}

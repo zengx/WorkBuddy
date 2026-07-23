@@ -1,7 +1,37 @@
 {
   "version": 1,
-  "lastUpdated": 1784776598620,
+  "lastUpdated": 1784777156520,
   "artifacts": [
+    {
+      "type": "media",
+      "uri": "file:///Users/zengx/Library/LaunchAgents/com.zengx.wbsync.pull.plist",
+      "name": "com.zengx.wbsync.pull.plist",
+      "title": "com.zengx.wbsync.pull.plist",
+      "mimeType": "application/octet-stream",
+      "contentType": "document",
+      "size": 652,
+      "createdAt": 1784777013906,
+      "updatedAt": 1784777013906,
+      "_meta": {
+        "sourceTool": "PresentFiles",
+        "requestId": "3565918a27db41e9aec25ac8a8758995"
+      }
+    },
+    {
+      "type": "media",
+      "uri": "file:///Users/zengx/Library/LaunchAgents/com.zengx.wbsync.push.plist",
+      "name": "com.zengx.wbsync.push.plist",
+      "title": "com.zengx.wbsync.push.plist",
+      "mimeType": "application/octet-stream",
+      "contentType": "document",
+      "size": 659,
+      "createdAt": 1784777017092,
+      "updatedAt": 1784777017093,
+      "_meta": {
+        "sourceTool": "PresentFiles",
+        "requestId": "3565918a27db41e9aec25ac8a8758995"
+      }
+    },
     {
       "type": "file-changes",
       "uri": "file-changes://%2FUsers%2Fzengx%2F.workbuddy%2Fwb-sync.sh",
@@ -11,10 +41,64 @@
       "contentType": "diff",
       "fileChangeInfo": {
         "uri": "/Users/zengx/.workbuddy/wb-sync.sh",
-        "changeType": "modified"
+        "changeType": "modified",
+        "additions": 278,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/.workbuddy/wb-sync.sh\n===================================================================\n--- /Users/zengx/.workbuddy/wb-sync.sh\n+++ /Users/zengx/.workbuddy/wb-sync.sh\n@@ -0,0 +1,278 @@\n+#!/bin/zsh\n+# WorkBuddy 跨设备同步脚本\n+# 用法: wb-sync [init|push|pull|status]\n+#\n+# 首次使用:\n+#   1. 在 GitHub 上创建一个私有仓库（比如 workbuddy-sync）\n+#   2. 修改下面的 REMOTE_URL\n+#   3. 运行: wb-sync init\n+#   4. 在另一台电脑上: wb-sync pull\n+#\n+# 日常使用:\n+#   离开当前电脑时: wb-sync push\n+#   到达另一台电脑时: wb-sync pull\n+\n+# ====== 配置（必填）======\n+REMOTE_URL=\"${WORKBUDDY_SYNC_REPO:-git@github.com:zengx/WorkBuddy.git}\"\n+BRANCH=\"main\"\n+# ==========================\n+\n+# 颜色\n+RED='\\033[0;31m'\n+GREEN='\\033[0;32m'\n+YELLOW='\\033[1;33m'\n+BLUE='\\033[0;34m'\n+NC='\\033[0m'\n+\n+WORKBUDDY_DIR=\"$HOME/.workbuddy\"\n+\n+# 检查 workbuddy 目录\n+if [ ! -d \"$WORKBUDDY_DIR\" ]; then\n+    echo \"${RED}❌ 找不到 $WORKBUDDY_DIR${NC}\"\n+    exit 1\n+fi\n+\n+cd \"$WORKBUDDY_DIR\" || exit 1\n+\n+# 创建 .gitignore\n+ensure_gitignore() {\n+    if [ -f .gitignore ]; then\n+        return\n+    fi\n+    echo \"${BLUE}创建 .gitignore...${NC}\"\n+    cat > .gitignore << 'EOF'\n+# 运行时临时文件\n+logs/\n+traces/\n+shell-snapshots/\n+*.db-wal\n+*.db-shm\n+.DS_Store\n+*.tmp\n+*.log\n+\n+# 应用自身（不需要同步）\n+app/\n+binaries/\n+\n+# 市场缓存\n+connectors-marketplace/\n+plugin-marketplace-state-new\n+.plugin-stats-cache.json\n+.connectors-marketplace.meta.json\n+\n+# 启动相关\n+install-timing-reported\n+tencent-docs-engine.port\n+last-launch.json\n+EOF\n+}\n+\n+# 初始化 git\n+ensure_git_repo() {\n+    if [ -d .git ]; then\n+        return\n+    fi\n+\n+    echo \"${YELLOW}首次使用，初始化 git 仓库...${NC}\"\n+    git init -q\n+    git branch -M \"$BRANCH\"\n+    ensure_gitignore\n+\n+    if ! git remote get-url origin &>/dev/null; then\n+        if [[ \"$REMOTE_URL\" == *\"YOUR_USERNAME\"* ]]; then\n+            echo \"${RED}❌ 请先修改脚本顶部的 REMOTE_URL，填入你的 GitHub 仓库地址${NC}\"\n+            echo \"   或者设置环境变量: export WORKBUDDY_SYNC_REPO=git@github.com:xxx/yyy.git\"\n+            exit 1\n+        fi\n+        git remote add origin \"$REMOTE_URL\"\n+        echo \"${GREEN}已关联远程仓库: $REMOTE_URL${NC}\"\n+    fi\n+}\n+\n+# 询问 WorkBuddy 是否已关闭\n+confirm_close_workbuddy() {\n+    # 非交互模式（被 launchd 等调用）直接通过\n+    if [[ ! -t 0 ]] || [[ \"$WB_SYNC_AUTO\" == \"1\" ]]; then\n+        return 0\n+    fi\n+    echo \"${YELLOW}⚠️  请确认 WorkBuddy 已完全退出（不是最小化窗口）${NC}\"\n+    read -p \"WorkBuddy 退出了吗？[y/N] \" -n 1 -r\n+    echo\n+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then\n+        echo \"${RED}请先退出 WorkBuddy（macOS: Cmd+Q，Windows: 文件→退出），再重试${NC}\"\n+        exit 1\n+    fi\n+}\n+\n+# 检查是否有 WorkBuddy 进程在运行\n+check_workbuddy_running() {\n+    if pgrep -f \"WorkBuddy\" &>/dev/null || pgrep -f \"workbuddy\" &>/dev/null; then\n+        echo \"${RED}❌ 检测到 WorkBuddy 还在运行${NC}\"\n+        echo \"   请先完全退出 WorkBuddy，再执行同步\"\n+        exit 1\n+    fi\n+}\n+\n+# 询问路径差异处理\n+handle_path_diff() {\n+    echo \"${BLUE}💡 提示: 如果两台电脑的 macOS 用户名不同，${NC}\"\n+    echo \"${BLUE}   同步完成后可能需要在 WorkBuddy 里重新指定工作目录${NC}\"\n+    echo \"${BLUE}   路径差异在 .workbuddy/projects/ 下的子目录名中${NC}\"\n+}\n+\n+# ====== 子命令 ======\n+\n+action_init() {\n+    ensure_git_repo\n+    ensure_gitignore\n+\n+    if git rev-parse --verify HEAD &>/dev/null && [ -n \"$(git log --oneline 2>/dev/null)\" ]; then\n+        echo \"${YELLOW}已经初始化过了${NC}\"\n+        git status -s\n+        return\n+    fi\n+\n+    check_workbuddy_running\n+\n+    echo \"${BLUE}添加文件并首次提交...${NC}\"\n+    git add -A\n+    if git diff --cached --quiet; then\n+        echo \"${YELLOW}没有可同步的内容（目录是空的）${NC}\"\n+        return\n+    fi\n+\n+    git commit -q -m \"initial sync from $(hostname) at $(date '+%Y-%m-%d %H:%M:%S')\"\n+    git push -u origin \"$BRANCH\"\n+    echo \"${GREEN}✅ 初始化完成！${NC}\"\n+    echo \"${BLUE}在另一台电脑上执行: wb-sync pull${NC}\"\n+}\n+\n+action_push() {\n+    ensure_git_repo\n+\n+    check_workbuddy_running\n+    confirm_close_workbuddy\n+\n+    git add -A\n+    if git diff --cached --quiet; then\n+        echo \"${YELLOW}没有新内容需要同步${NC}\"\n+        return\n+    fi\n+\n+    git commit -q -m \"sync from $(hostname) at $(date '+%Y-%m-%d %H:%M:%S')\"\n+\n+    if ! git push origin \"$BRANCH\" 2>&1 | tee /tmp/wb-sync-push.log; then\n+        echo \"${RED}❌ 推送失败${NC}\"\n+        if grep -q \"non-fast-forward\" /tmp/wb-sync-push.log; then\n+            echo \"${YELLOW}提示: 远程有新提交。先 pull 一下：wb-sync pull --force-overwrite${NC}\"\n+        fi\n+        exit 1\n+    fi\n+\n+    echo \"${GREEN}✅ 推送完成${NC}\"\n+}\n+\n+action_pull() {\n+    ensure_git_repo\n+\n+    check_workbuddy_running\n+\n+    # 备份本地配置\n+    BACKUP_DIR=\"$HOME/.workbuddy.backup.$(date '+%Y%m%d_%H%M%S')\"\n+    echo \"${BLUE}📦 备份本地配置到 $BACKUP_DIR${NC}\"\n+    mkdir -p \"$BACKUP_DIR\"\n+    cp -R \"$WORKBUDDY_DIR\"/. \"$BACKUP_DIR\"/ 2>/dev/null\n+\n+    git fetch origin\n+\n+    # 检查本地是否有未推送的提交\n+    LOCAL_AHEAD=$(git rev-list --count origin/\"$BRANCH\"..HEAD 2>/dev/null || echo 0)\n+    if [ \"$LOCAL_AHEAD\" -gt 0 ]; then\n+        echo \"${YELLOW}⚠️  本地有 $LOCAL_AHEAD 个未推送的提交${NC}\"\n+        echo \"请选择:\"\n+        echo \"  1) 先 push（推荐）→  wb-sync push\"\n+        echo \"  2) 放弃本地更改，用远程覆盖 →  wb-sync pull --force-overwrite\"\n+        exit 1\n+    fi\n+\n+    # 拉取\n+    if ! git pull --rebase origin \"$BRANCH\" 2>&1; then\n+        echo \"${YELLOW}rebase 失败，尝试普通 merge...${NC}\"\n+        git pull origin \"$BRANCH\" || {\n+            echo \"${RED}❌ 拉取失败，可能有冲突。请检查后手动处理${NC}\"\n+            exit 1\n+        }\n+    fi\n+\n+    echo \"${GREEN}✅ 拉取完成${NC}\"\n+    handle_path_diff\n+    echo \"${BLUE}现在可以打开 WorkBuddy 了${NC}\"\n+}\n+\n+action_force_pull() {\n+    ensure_git_repo\n+    check_workbuddy_running\n+\n+    BACKUP_DIR=\"$HOME/.workbuddy.backup.$(date '+%Y%m%d_%H%M%S')\"\n+    echo \"${BLUE}📦 备份到 $BACKUP_DIR${NC}\"\n+    mkdir -p \"$BACKUP_DIR\"\n+    cp -R \"$WORKBUDDY_DIR\"/. \"$BACKUP_DIR\"/ 2>/dev/null\n+\n+    echo \"${YELLOW}强制重置到远程版本...${NC}\"\n+    git fetch origin\n+    git reset --hard origin/\"$BRANCH\"\n+\n+    echo \"${GREEN}✅ 完成${NC}\"\n+    handle_path_diff\n+}\n+\n+action_status() {\n+    if [ ! -d .git ]; then\n+        echo \"${YELLOW}还没初始化。运行: wb-sync init${NC}\"\n+        return\n+    fi\n+\n+    echo \"${BLUE}=== 仓库信息 ===${NC}\"\n+    echo \"远程: $(git remote get-url origin 2>/dev/null || echo '未配置')\"\n+    echo \"分支: $BRANCH\"\n+    echo \"\"\n+    echo \"${BLUE}=== 状态 ===${NC}\"\n+    git status\n+    echo \"\"\n+    echo \"${BLUE}=== 同步状态 ===${NC}\"\n+    LOCAL=$(git rev-parse HEAD 2>/dev/null)\n+    REMOTE=$(git rev-parse origin/\"$BRANCH\" 2>/dev/null)\n+    if [ \"$LOCAL\" = \"$REMOTE\" ]; then\n+        echo \"${GREEN}✅ 本地与远程一致${NC}\"\n+    else\n+        AHEAD=$(git rev-list --count origin/\"$BRANCH\"..HEAD 2>/dev/null)\n+        BEHIND=$(git rev-list --count HEAD..origin/\"$BRANCH\" 2>/dev/null)\n+        [ \"$AHEAD\" -gt 0 ] && echo \"${YELLOW}本地领先远程 $AHEAD 个提交（需要 push）${NC}\"\n+        [ \"$BEHIND\" -gt 0 ] && echo \"${YELLOW}本地落后远程 $BEHIND 个提交（需要 pull）${NC}\"\n+    fi\n+}\n+\n+# ====== 入口 ======\n+case \"${1:-status}\" in\n+    init)     action_init ;;\n+    push)     action_push ;;\n+    pull)\n+        if [ \"$2\" = \"--force-overwrite\" ]; then\n+            action_force_pull\n+        else\n+            action_pull\n+        fi\n+        ;;\n+    status)   action_status ;;\n+    *)\n+        echo \"用法: $0 [init|push|pull|status]\"\n+        echo \"\"\n+        echo \"命令:\"\n+        echo \"  init    首次使用，初始化仓库（只需要执行一次）\"\n+        echo \"  push    把当前电脑的更改推送到 GitHub\"\n+        echo \"  pull    从 GitHub 拉取最新内容到当前电脑\"\n+        echo \"  status  查看同步状态\"\n+        exit 1\n+        ;;\n+esac\n"
       },
-      "createdAt": 1784776598596,
-      "updatedAt": 1784776598596
+      "createdAt": 1784777156517,
+      "updatedAt": 1784777156517
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2FWorkBuddy%2F2026-07-22-13-04-37%2F.workbuddy%2Fmemory%2F2026-07-23.md",
+      "name": "2026-07-23.md",
+      "title": "2026-07-23.md",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/WorkBuddy/2026-07-22-13-04-37/.workbuddy/memory/2026-07-23.md",
+        "changeType": "modified",
+        "additions": 45,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/WorkBuddy/2026-07-22-13-04-37/.workbuddy/memory/2026-07-23.md\n===================================================================\n--- /Users/zengx/WorkBuddy/2026-07-22-13-04-37/.workbuddy/memory/2026-07-23.md\n+++ /Users/zengx/WorkBuddy/2026-07-22-13-04-37/.workbuddy/memory/2026-07-23.md\n@@ -0,0 +1,45 @@\n+# 2026-07-23\n+\n+## WorkBuddy 跨设备同步\n+\n+用户在多台设备（公司/家里）使用 WorkBuddy，遇到对话历史不跨设备同步的问题。\n+WorkBuddy 只同步账号配置，对话记录、记忆文件、Skills、MCP 配置等都存在本地 `~/.workbuddy/`，不自动同步。\n+\n+为用户写了一个一键同步脚本：`~/.workbuddy/wb-sync.sh`\n+- 用法：`wb-sync [init|push|pull|status]`\n+- 原理：`~/.workbuddy/` 目录用 Git 管理 → 推送到 GitHub 私有仓库 → 另一台电脑 pull\n+- 已在 `~/.zshrc` 添加 alias `wb-sync`\n+- 已添加 `.gitignore`，排除 `app/`、`binaries/`、`logs/`、`traces/`、`shell-snapshots/`、WAL 文件、市场缓存、临时文件等\n+\n+### 已完成配置（公司电脑）\n+- GitHub 账号：zengx\n+- 仓库：https://github.com/zengx/WorkBuddy （私有）\n+- 认证：SSH Key（ed25519，公钥已添加到 GitHub）\n+- Git 身份：zengx <zengx@users.noreply.github.com>\n+- ✅ 首次推送：6745 个对象，16.57 MiB，main 分支\n+\n+### 待完成（家里电脑）\n+1. 安装 WorkBuddy 并登录同账号\n+2. 生成 SSH Key 并添加到 GitHub\n+3. 把 `wb-sync.sh` 脚本和 alias 同步过去（可以从 GitHub 仓库或直接复制）\n+4. 运行 `wb-sync pull` 拉取配置\n+5. 日常：`wb-sync push` / `wb-sync pull`\n+\n+### 自动化已配置（macOS launchd）\n+配置了 `~/Library/LaunchAgents/` 下两个 launchd 任务，做到全自动：\n+- `com.zengx.wbsync.pull.plist` - 登录/启动时自动拉取（sleep 30 后执行）\n+- `com.zengx.wbsync.push.plist` - 每 5 分钟检查一次，WorkBuddy 不在时自动推送\n+\n+脚本改造：检测 `WB_SYNC_AUTO=1` 环境变量或非 TTY 时跳过确认提示\n+日志位置：`/tmp/wbsync-pull.log`、`/tmp/wbsync-push.log`\n+\n+管理命令：\n+- 停止：launchctl bootout gui/$UID ~/Library/LaunchAgents/com.zengx.wbsync.push.plist\n+- 启动：launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.zengx.wbsync.push.plist\n+- 立即执行 push：launchctl kickstart -k gui/$UID/com.zengx.wbsync.push\n+\n+### 注意事项\n+- 两台电脑 macOS 用户名不同时，可能需要在 WorkBuddy 里重新指定工作目录\n+- 切换电脑前要先 Cmd+Q 退出 WorkBuddy，再 push/pull\n+- 不要两台同时 push，避免冲突\n+- 家里电脑也配同样的 launchd 任务（脚本可从 GitHub 拉取）\n"
+      },
+      "createdAt": 1784777156517,
+      "updatedAt": 1784777156517
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2FLibrary%2FLaunchAgents%2Fcom.zengx.wbsync.pull.plist",
+      "name": "com.zengx.wbsync.pull.plist",
+      "title": "com.zengx.wbsync.pull.plist",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/Library/LaunchAgents/com.zengx.wbsync.pull.plist",
+        "changeType": "modified",
+        "additions": 24,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/Library/LaunchAgents/com.zengx.wbsync.pull.plist\n===================================================================\n--- /Users/zengx/Library/LaunchAgents/com.zengx.wbsync.pull.plist\n+++ /Users/zengx/Library/LaunchAgents/com.zengx.wbsync.pull.plist\n@@ -0,0 +1,24 @@\n+<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n+<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n+<plist version=\"1.0\">\n+<dict>\n+    <key>Label</key>\n+    <string>com.zengx.wbsync.pull</string>\n+\n+    <key>ProgramArguments</key>\n+    <array>\n+        <string>/bin/zsh</string>\n+        <string>-c</string>\n+        <string>sleep 30 && WB_SYNC_AUTO=1 /Users/zengx/.workbuddy/wb-sync.sh pull</string>\n+    </array>\n+\n+    <key>RunAtLoad</key>\n+    <true/>\n+\n+    <key>StandardOutPath</key>\n+    <string>/tmp/wbsync-pull.log</string>\n+\n+    <key>StandardErrorPath</key>\n+    <string>/tmp/wbsync-pull.err</string>\n+</dict>\n+</plist>\n"
+      },
+      "createdAt": 1784777156517,
+      "updatedAt": 1784777156517
+    },
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2FLibrary%2FLaunchAgents%2Fcom.zengx.wbsync.push.plist",
+      "name": "com.zengx.wbsync.push.plist",
+      "title": "com.zengx.wbsync.push.plist",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/Library/LaunchAgents/com.zengx.wbsync.push.plist",
+        "changeType": "modified",
+        "additions": 24,
+        "deletions": 0,
+        "diff": "Index: /Users/zengx/Library/LaunchAgents/com.zengx.wbsync.push.plist\n===================================================================\n--- /Users/zengx/Library/LaunchAgents/com.zengx.wbsync.push.plist\n+++ /Users/zengx/Library/LaunchAgents/com.zengx.wbsync.push.plist\n@@ -0,0 +1,24 @@\n+<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n+<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n+<plist version=\"1.0\">\n+<dict>\n+    <key>Label</key>\n+    <string>com.zengx.wbsync.push</string>\n+\n+    <key>ProgramArguments</key>\n+    <array>\n+        <string>/bin/zsh</string>\n+        <string>-c</string>\n+        <string>WB_SYNC_AUTO=1 /Users/zengx/.workbuddy/wb-sync.sh push</string>\n+    </array>\n+\n+    <key>StartInterval</key>\n+    <integer>300</integer>\n+\n+    <key>StandardOutPath</key>\n+    <string>/tmp/wbsync-push.log</string>\n+\n+    <key>StandardErrorPath</key>\n+    <string>/tmp/wbsync-push.err</string>\n+</dict>\n+</plist>\n"
+      },
+      "createdAt": 1784777156517,
+      "updatedAt": 1784777156517
     }
   ]
 }
