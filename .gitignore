@@ -1,0 +1,24 @@
+# 运行时临时文件
+logs/
+traces/
+shell-snapshots/
+*.db-wal
+*.db-shm
+.DS_Store
+*.tmp
+*.log
+
+# 应用自身（不需要同步）
+app/
+binaries/
+
+# 市场缓存
+connectors-marketplace/
+plugin-marketplace-state-new
+.plugin-stats-cache.json
+.connectors-marketplace.meta.json
+
+# 启动相关
+install-timing-reported
+tencent-docs-engine.port
+last-launch.json

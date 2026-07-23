@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-browser": {
+      "id": "agent-browser",
+      "type": "skill",
+      "lastUsedDate": "2026-07-23",
+      "recentDates": [
+        "2026-07-23"
+      ],
+      "firstSeenDate": "2026-07-23"
+    }
+  },
+  "mcps": {},
+  "activeDays": [
+    "2026-07-23"
+  ],
+  "dismissedIdle": {}
+}

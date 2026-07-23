@@ -1,0 +1,28 @@
+{
+  "id": "automation-1784775173373",
+  "name": "厦门天气及晚霞概率",
+  "prompt": "厦门每天含湿度，是否下雨，晚霞概率。",
+  "status": "ACTIVE",
+  "scheduleType": "recurring",
+  "nextRunAt": 1784852400000.0027,
+  "cwds": [
+    "/Users/zengx/WorkBuddy/automation-2026-07-23-10-52-53"
+  ],
+  "rrule": "FREQ=DAILY;BYHOUR=8;BYMINUTE=30",
+  "validFrom": "",
+  "validUntil": "",
+  "modelId": "auto",
+  "modelIsThinking": true,
+  "skills": [],
+  "pushToWeChat": true,
+  "pushToWecomBot": false,
+  "ownerUserId": "10c1614a-da07-4d75-bf94-766e9ce42ee7",
+  "ownerStatus": "confirmed",
+  "ownerSource": "created",
+  "expertId": "TripStarAgent",
+  "expertMarketplace": "official",
+  "connectorIds": [],
+  "permissionMode": "fullAccess",
+  "createdAt": 1784775173373,
+  "updatedAt": 1784775173373
+}

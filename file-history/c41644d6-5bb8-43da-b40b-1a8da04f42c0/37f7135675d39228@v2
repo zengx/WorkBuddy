@@ -1,0 +1,18 @@
+# 2026-07-23
+
+## WorkBuddy 跨设备同步
+
+用户在多台设备（公司/家里）使用 WorkBuddy，遇到对话历史不跨设备同步的问题。
+WorkBuddy 只同步账号配置，对话记录、记忆文件、Skills、MCP 配置等都存在本地 `~/.workbuddy/`，不自动同步。
+
+为用户写了一个一键同步脚本：`~/.workbuddy/wb-sync.sh`
+- 用法：`wb-sync [init|push|pull|status]`
+- 原理：`~/.workbuddy/` 目录用 Git 管理 → 推送到 GitHub 私有仓库 → 另一台电脑 pull
+- 已在 `~/.zshrc` 添加 alias `wb-sync`
+- 已添加 `.gitignore`，排除 `app/`、`binaries/`、`logs/`、`traces/`、`shell-snapshots/`、WAL 文件、市场缓存、临时文件等
+
+用户使用前需要：
+1. 在 GitHub 创建私有仓库
+2. 修改脚本第 16 行的 `REMOTE_URL`，或设置环境变量 `WORKBUDDY_SYNC_REPO`
+3. 在第一台电脑上跑 `wb-sync init`，第二台跑 `wb-sync pull`
+4. 日常：`wb-sync push` / `wb-sync pull`

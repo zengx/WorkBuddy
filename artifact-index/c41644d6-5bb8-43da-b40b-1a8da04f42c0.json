@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "lastUpdated": 1784776598620,
+  "artifacts": [
+    {
+      "type": "file-changes",
+      "uri": "file-changes://%2FUsers%2Fzengx%2F.workbuddy%2Fwb-sync.sh",
+      "name": "wb-sync.sh",
+      "title": "wb-sync.sh",
+      "mimeType": "text/x-diff",
+      "contentType": "diff",
+      "fileChangeInfo": {
+        "uri": "/Users/zengx/.workbuddy/wb-sync.sh",
+        "changeType": "modified"
+      },
+      "createdAt": 1784776598596,
+      "updatedAt": 1784776598596
+    }
+  ]
+}
